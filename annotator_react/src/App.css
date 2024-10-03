@@ -1,0 +1,12 @@
+/* Import your font (optional) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+
+/* Apply global font */
+body, html, * {
+    font-family: 'Roboto', sans-serif;  /* Replace 'Roboto' with your desired font */
+    font-size: 16x;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}

@@ -40,12 +40,6 @@ RUN npm install -g vite
 # Install the SAM2 repository
 RUN pip install "git+https://github.com/facebookresearch/segment-anything-2.git"
 
-# Copy the model file into the container (relative path since it's in the same folder as the Dockerfile)
-COPY ./sam2_hiera_large.pt /workspace/models/sam2_hiera_large.pt
-
-# Set environment variable for the encoder path (modify as needed in your application)
-ENV ENCODER_PATH /workspace/models/sam2_hiera_large.pt
-
 # Copy your Flask app into the container (relative path since it's in the same folder as the Dockerfile)
 COPY ./annot_flask /workspace/flask_app
 

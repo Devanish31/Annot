@@ -24,14 +24,15 @@ RUN apt-get install -y build-essential python3-dev nodejs npm
 RUN conda create --name sam2 python=3.12 -y
 
 # Install git inside the Conda environment
-RUN conda install -n sam2 git -y
+RUN conda isntall -n sam2 git -y
 
 # Activate the conda environment with Python 3.12
-SHELL ["conda", "run", "-n", "sam2", "/bin/bash", "-c"]
+SHELL ["conda", "run", "n", "sam2", "/bin/bash", "-c"]
 
-# Install required Python packages with GPU support
+# Install required Python packages with GPU support and Flask
 RUN conda install -n sam2 -c pytorch pytorch torchvision torchaudio cudatoolkit=11.8 -y
-RUN conda install -n sam2 -c conda-forge opencv matplotlib pillow numpy jupyter flask -y
+RUN conda install -n sam2 -c conda-forge opencv matplotlib pillow numpy jupyter flask flask-cors -y
+RUN pip install nodemon
 
 # Install Vite globally
 RUN npm install -g vite
@@ -49,14 +50,14 @@ ENV ENCODER_PATH /workspace/models/sam2_hiera_large.pt
 COPY ./annot_flask /workspace/flask_app
 
 # Copy your React app into the container (relative path since it's in the same folder as the Dockerfile)
-COPY ./annotator_react /workspace/react_app
+COPY ./annotator_react /workspace/react_app.
 
 # Install dependencies for the Vite React app
 WORKDIR /workspace/react_app
 RUN npm install
 
-# Build the Vite React app for development (consider changing to npm run build for production)
-RUN npm run dev
+# Build the Vite React app for production
+RUN npm run build
 
 # Go back to the workspace directory
 WORKDIR /workspace
@@ -65,4 +66,4 @@ WORKDIR /workspace
 EXPOSE 5000 3000 8888
 
 # Start both Flask and React servers using Vite for React, Flask for backend, and Jupyter
-CMD ["conda", "run", "-n", "sam2", "/bin/bash", "-c", "flask run --host=0.0.0.0 --port=5000 & vite --host --port 3000 & jupyter notebook --ip=0.0.0.0 --allow-root --no-browser"]
+CMD ["conda", "run", "-n", "sam2", "/bin/bash", "-c", "nodemon --exec flask run --host=0.0.0.0 --port=5000 & vite --host --port 3000 & jupyter notebook --ip=0.0.0.0 --allow-root --no-browser"]
